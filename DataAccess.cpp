@@ -90,48 +90,135 @@ int DataAccess::readAttributeData(const string& csvFile, vector<Attribute>& attr
     return 0;
 } 
 
-int DataAccess::readProviderData(const string& csvFile) {
-    // Implementation needed
+int DataAccess::readProviderData(const string& csvFile, vector<Provider>& providers) {
+    ifstream file(csvFile);
+    if (!file.is_open()) {
+        cerr << "Error opening file: " << csvFile << endl;
+        return -1;
+    }
+    string line;
+    while (getline(file, line)) {
+        auto tokens = split(line, ',');
+        if (tokens.size() == 4) {
+            // Assuming CSV format: TimeStamp, SensorID, AttributeID, Value
+            providers.push_back(Measurement(tokens[0], tokens[1],  tokens[2], stof(tokens[3])));
+        }
+    }
+    file.close();
     return 0;
 }
 
-int DataAccess::readCleanerData(const string& csvFile) {
-    // Implementation needed
+int DataAccess::readCleanerData(const string& csvFile, vector<Cleaner>& cleaners) {
+    ifstream file(csvFile);
+    if (!file.is_open()) {
+        cerr << "Error opening file: " << csvFile << endl;
+        return -1;
+    }
+    string line;
+    while (getline(file, line)) {
+        auto tokens = split(line, ',');
+        if (tokens.size() == 4) {
+            // Assuming CSV format: TimeStamp, SensorID, AttributeID, Value
+            cleaners.push_back(Measurement(tokens[0], tokens[1],  tokens[2], stof(tokens[3])));
+        }
+    }
+    file.close();
     return 0;
 }
 
-int DataAccess::readUserData(const string& csvFile) {
-    // Implementation needed
+int DataAccess::readUserData(const string& csvFile, vector<User>& users) {
+    ifstream file(csvFile);
+    if (!file.is_open()) {
+        cerr << "Error opening file: " << csvFile << endl;
+        return -1;
+    }
+    string line;
+    while (getline(file, line)) {
+        auto tokens = split(line, ',');
+        if (tokens.size() == 4) {
+            // Assuming CSV format: TimeStamp, SensorID, AttributeID, Value
+            users.push_back(Measurement(tokens[0], tokens[1],  tokens[2], stof(tokens[3])));
+        }
+    }
+    file.close();
     return 0;
 }
 
 int DataAccess::writeSensorData(const string& csvFile, const vector<Sensor>& sensors) {
-    // Implementation needed
+    ofstream file(csvFile);
+    if (!file.is_open()) {
+        cerr << "Error opening file: " << csvFile << endl;
+        return -1;
+    }
+    for (const auto& sensor : sensors) {
+        file << sensor.getID() << "," << sensor.getLatitude() << "," << sensor.getLongitude() << endl;
+    }
+    file.close();
     return 0;
 }
 
 int DataAccess::writeMeasurementData(const string& csvFile, const vector<Measurement>& measurements) {
-    // Implementation needed
+    ofstream file(csvFile);
+    if (!file.is_open()) {
+        cerr << "Error opening file: " << csvFile << endl;
+        return -1;
+    }
+    for (const auto& measurement : measurements) {
+        file << measurement.getID() << "," << measurement.getLatitude() << "," << measurement.getLongitude() << endl;
+    }
+    file.close();
     return 0;
 }
 
 int DataAccess::writeAttributeData(const string& csvFile, const vector<Attribute>& attributes) {
-    // Implementation needed
+    ofstream file(csvFile);
+    if (!file.is_open()) {
+        cerr << "Error opening file: " << csvFile << endl;
+        return -1;
+    }
+    for (const auto& attribute : attributes) {
+        file << attribute.getID() << "," << attribute.getLatitude() << "," << attribute.getLongitude() << endl;
+    }
+    file.close();
     return 0;
 }
 
-int DataAccess::writeProviderData(const string& csvFile) {
-    // Implementation needed
+int DataAccess::writeProviderData(const string& csvFile, const vector<Provider>& providers) {
+    ofstream file(csvFile);
+    if (!file.is_open()) {
+        cerr << "Error opening file: " << csvFile << endl;
+        return -1;
+    }
+    for (const auto& provider : providers) {
+        file << provider.getID() << "," << provider.getLatitude() << "," << provider.getLongitude() << endl;
+    }
+    file.close();
     return 0;
 }
 
-int DataAccess::writeCleanerData(const string& csvFile) {
-    // Implementation needed
+int DataAccess::writeCleanerData(const string& csvFile, const vector<Cleaner>& cleaners) {
+    ofstream file(csvFile);
+    if (!file.is_open()) {
+        cerr << "Error opening file: " << csvFile << endl;
+        return -1;
+    }
+    for (const auto& cleaner : cleaners) {
+        file << cleaner.getID() << "," << cleaner.getLatitude() << "," << cleaner.getLongitude() << endl;
+    }
+    file.close();
     return 0;
 }
 
-int DataAccess::writeUserData(const string& csvFile) {
-    // Implementation needed
+int DataAccess::writeUserData(const string& csvFile, const vector<User>& users) {
+    ofstream file(csvFile);
+    if (!file.is_open()) {
+        cerr << "Error opening file: " << csvFile << endl;
+        return -1;
+    }
+    for (const auto& user : users) {
+        file << user.getID() << "," << user.getLatitude() << "," << user.getLongitude() << endl;
+    }
+    file.close();
     return 0;
 }
 
