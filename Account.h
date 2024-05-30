@@ -1,3 +1,11 @@
+/*************************************************************************
+                           Account  -  Description
+                             -------------------
+    Start Date          : $DATE$
+    Copyright           : (C) $YEAR$ by $AUTHOR$
+    Email               : $EMAIL$
+*************************************************************************/
+
 //---------- Class Interface of <Account> (file Account.h) -----------------------
 #if ! defined ( ACCOUNT_H )
 #define ACCOUNT_H

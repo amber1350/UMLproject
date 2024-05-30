@@ -11,8 +11,8 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- System Includes
-using namespace std;
 #include <iostream>
+using namespace std;
 
 //------------------------------------------------------ Personal Includes
 #include "Sensor.h"
@@ -58,6 +58,16 @@ float Sensor::getLongitude() const {
 
 vector<Measurement> Sensor::getMeasurements() const {
     return measurements;
+}
+
+// Overloaded << operator
+ostream& operator<<(ostream& os, const Sensor& s) {
+    os << "SensorID: " << s.sensorID << ", Latitude: " << s.latitude << ", Longitude: " << s.longitude << ", Measurements: [";
+    for (const auto& measurement : s.measurements) {
+        os << measurement << ", ";
+    }
+    os << "]";
+    return os;
 }
 
 //------------------------------------------------------------------ PRIVATE

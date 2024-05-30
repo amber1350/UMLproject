@@ -31,7 +31,8 @@ public:
 //----------------------------------------------------- Public Methods
 
 //------------------------------------------------- Operator Overloading
-
+// Overloaded << operator
+    friend ostream& operator<<(ostream& os, const Attribute& a);
 
 //-------------------------------------------- Constructors - Destructor
     Attribute(const string& id, const string& unit, const string& desc);    

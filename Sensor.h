@@ -34,25 +34,14 @@ public:
 //----------------------------------------------------- Public Methods
 
 //------------------------------------------------- Operator Overloading
-    Sensor & operator = ( const Sensor & unSensor );
-    // Usage:
-    //
-    // Contract:
-    //
-
+    // Overloaded << operator
+    friend ostream& operator<<(ostream& os, const Sensor& s);
 
 //-------------------------------------------- Constructors - Destructor
-    Sensor(const string& id, float lat, float lon);    
-    // Usage:
-    //
-    // Contract:
-    //
+    Sensor(const string& id, float lat, float lon);   
+    
     
     virtual ~Sensor ( );
-    // Usage:
-    //
-    // Contract:
-    //
     
 //-------------------------------------------- Getters
     const string & getSensorID() const;

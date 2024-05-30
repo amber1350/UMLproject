@@ -56,6 +56,12 @@ string Attribute::getDescription() const {
     return description;
 }
 
+// Overloaded << operator
+ostream& operator<<(ostream& os, const Attribute& a) {
+    os << "AttributeID: " << a.attributeID << ", Unit: " << a.unit << ", Description: " << a.description;
+    return os;
+}
+
 //------------------------------------------------------------------ PRIVATE
 
 //----------------------------------------------------- Protected Methods

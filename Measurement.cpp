@@ -59,6 +59,12 @@ float Measurement::GetValue() const
     return value;
 }
 
+// Overloaded << operator
+ostream& operator<<(ostream& os, const Measurement& m) {
+    os << "Timestamp: " << m.timestamp << ", SensorID: " << m.sensorID << ", AttributeID: " << m.attributeID << ", Value: " << m.value;
+    return os;
+}
+
 
 //------------------------------------------------------------------ PRIVATE
 

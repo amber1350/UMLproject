@@ -31,25 +31,15 @@ public:
 //----------------------------------------------------- Public Methods
 
 //------------------------------------------------- Operator Overloading
-    Measurement & operator = ( const Measurement & unMeasurement );
-    // Usage:
-    //
-    // Contract:
-    //
+    // Overloaded << operator
+    friend ostream& operator<<(ostream& os, const Measurement& m);
 
 
 //-------------------------------------------- Constructors - Destructor
     Measurement(const string & timestamp, const string & sensorID, const string & attributeID, float value);
-    // Usage:
-    //
-    // Contract:
-    //
-    
+        
     virtual ~Measurement ( );
-    // Usage:
-    //
-    // Contract:
-    //
+    
 //-------------------------------------------- Getters
     const std::string & GetTimestamp() const;
     const std::string & GetAttributeID() const;
