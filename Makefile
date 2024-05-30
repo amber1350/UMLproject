@@ -3,8 +3,8 @@ ifeq ($(DMAP),1)
     DMAP_FLAG := -D DMAP
 endif
 
-main : main.o Account.o Agent.o Attribute.o	Measurement.o Provider.o Sensor.o User.o SClass.o DataAccess.o
-	g++ $(DMAP_FLAG) -o main main.o Account.o Agent.o Attribute.o	Measurement.o Provider.o Sensor.o User.o SClass.o DataAccess.o
+main : main.o Account.o Agent.o Attribute.o	Measurement.o Provider.o Sensor.o User.o DataAccess.o
+	g++ $(DMAP_FLAG) -o main main.o Account.o Agent.o Attribute.o Measurement.o Provider.o Sensor.o User.o DataAccess.o
 
 main.o : main.cpp 
 	g++ $(DMAP_FLAG) -c main.cpp 
@@ -29,9 +29,6 @@ Sensor.o : Sensor.cpp
 
 User.o : User.cpp
 	g++ $(DMAP_FLAG) -c User.cpp
-
-SClass.o : SClass.cpp
-	g++ $(DMAP_FLAG) -c SClass.cpp
 
 DataAccess.o : DataAccess.cpp
 	g++ $(DMAP_FLAG) -c DataAccess.cpp
