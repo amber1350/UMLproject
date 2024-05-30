@@ -23,7 +23,7 @@ using namespace std;
 //
 //------------------------------------------------------------------------
 
-class Attribute :
+class Attribute 
 {
 //----------------------------------------------------------------- PUBLIC
 
@@ -59,7 +59,7 @@ protected:
 
 //----------------------------------------------------- Protected Attributes
     string attributeID;
-    tring unit;
+    string unit;
     string description;  
 };
 

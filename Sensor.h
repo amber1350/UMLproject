@@ -12,6 +12,9 @@
 
 //------------------------------------------------------- Used Interfaces
 #include <string>
+#include <vector>
+#include "Measurement.h"
+
 using namespace std; 
 //------------------------------------------------------------- Constants
 
@@ -23,7 +26,7 @@ using namespace std;
 //
 //------------------------------------------------------------------------
 
-class Sensor :
+class Sensor 
 {
 //----------------------------------------------------------------- PUBLIC
 
@@ -55,7 +58,7 @@ public:
     const string & getSensorID() const;
     float getLatitude() const;
     float getLongitude() const;
-    vector<Measurement> getMeasurements() const
+    vector<Measurement> getMeasurements() const;
 
 
 //------------------------------------------------------------------ PRIVATE
@@ -69,10 +72,10 @@ protected:
     //
 
 //----------------------------------------------------- Protected Attributes
-    string sensorID
-    float latitude
-    float longitude
-    vector<Measurement> measurements    
+    string sensorID;
+    float latitude;
+    float longitude;
+    vector<Measurement> measurements;
 };
 
 //-------------------------------- Other definitions depending on <Sensor>

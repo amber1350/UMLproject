@@ -25,7 +25,7 @@ using namespace std;
 
 //-------------------------------------------- Constructors - Destructor
 Attribute::Attribute(const string& id, const string& unit, const string& desc)
-    : attributeID(id), unit(unit), description(desc) {}
+    : attributeID(id), unit(unit), description(desc)
 // Algorithm:
 //
 {

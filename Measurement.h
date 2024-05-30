@@ -23,7 +23,7 @@ using namespace std;
 //
 //------------------------------------------------------------------------
 
-class Measurement :
+class Measurement 
 {
 //----------------------------------------------------------------- PUBLIC
 
@@ -39,7 +39,7 @@ public:
 
 
 //-------------------------------------------- Constructors - Destructor
-    Measurement(const std::string & timestamp, const std::string & attributeID, float value);
+    Measurement(const string & timestamp, const string & sensorID, const string & attributeID, float value);
     // Usage:
     //
     // Contract:
@@ -61,7 +61,8 @@ protected:
 //----------------------------------------------------- Protected Methods
 
 //----------------------------------------------------- Protected Attributes
-    string timestamp;
+    string timestamp;    
+    string sensorID;
     string attributeID;
     float value;
 };

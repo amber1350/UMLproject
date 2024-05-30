@@ -25,7 +25,7 @@ using namespace std;
 
 //-------------------------------------------- Constructors - Destructor
 Sensor::Sensor(const string& id, float lat, float lon)
-    : sensorID(id), latitude(lat), longitude(lon) {}
+    : sensorID(id), latitude(lat), longitude(lon)
 // Algorithm:
 //
 {
@@ -44,7 +44,7 @@ Sensor::~Sensor ( )
 } //----- End of ~Sensor
 
 // Getters
-string Sensor::getSensorID() const {
+const string & Sensor::getSensorID() const {
     return sensorID;
 }
 

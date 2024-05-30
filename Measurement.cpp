@@ -24,8 +24,8 @@ using namespace std;
 //--------------------------------------------------------- Public Methods
 
 //-------------------------------------------- Constructors - Destructor
-Measurement::::Measurement(const std::string & timestamp, const std::string & attributeID, float value)
-    : timestamp(timestamp), attributeID(attributeID), value(value) {}
+Measurement::Measurement(const string & timestamp, const string & sensorID, const string & attributeID, float value)
+    : timestamp(timestamp), sensorID(sensorID), attributeID(attributeID), value(value)
 // Algorithm:
 //
 {
