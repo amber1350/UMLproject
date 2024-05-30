@@ -4,6 +4,8 @@
 
 //------------------------------------------------------- Used Interfaces
 #include "Account.h"
+#include <vector>
+#include <string>
 
 class User : public Account
 {
@@ -11,12 +13,13 @@ class User : public Account
 
 public:
 //----------------------------------------------------- Public Methods
-    int getScore ( );
+    int getScore();
+    bool evaluateReliability(const std::vector<std::string>& measurements);
 
 //-------------------------------------------- Constructors - Destructor
-    User ( );
+    User();
 
-    virtual ~User ( );
+    virtual ~User();
 
 //------------------------------------------------------------------ PRIVATE
 
@@ -24,6 +27,7 @@ protected:
 
 //----------------------------------------------------- Protected Attributes
     int score;
+    bool isReliable;
 };
 
 #endif // USER_H

@@ -7,6 +7,7 @@
 #include "Provider.h"
 #include "SClasse.h"
 #include "User.h"
+#include "Sensor.h"
 
 
 using namespace std;
