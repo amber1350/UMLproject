@@ -28,7 +28,7 @@ string Account::getPassword ( )
 } //----- End of getPassword
 
 Account::Account ( )
-{
+{   
 #ifdef MAP
     cout << "Call to the constructor of <Account>" << endl;
 #endif
