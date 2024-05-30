@@ -4,7 +4,7 @@ ifeq ($(DMAP),1)
 endif
 
 main : main.o Account.o Agent.o Attribute.o	Measurement.o Provider.o Sensor.o User.o DataAccess.o
-	g++ $(DMAP_FLAG) -o main main.o Account.o Agent.o Attribute.o Measurement.o Provider.o Sensor.o User.o DataAccess.o
+	g++ -o main main.o Account.o Agent.o Attribute.o Measurement.o Provider.o Sensor.o User.o DataAccess.o
 
 test : main_measurements.o DataAccess.o Attribute.o Measurement.o Sensor.o
 	g++ -o test main_measurements.o DataAccess.o Attribute.o Measurement.o Sensor.o
