@@ -2,8 +2,13 @@
     "files.associations": {
         "sstream": "cpp",
         "fstream": "cpp",
+<<<<<<< HEAD
         "__split_buffer": "cpp",
         "string": "cpp",
         "vector": "cpp"
+=======
+        "iosfwd": "cpp",
+        "ostream": "cpp"
+>>>>>>> 2513654ac10ddabd854f9aa1e6bcc21a12ce6060
     }
 }
