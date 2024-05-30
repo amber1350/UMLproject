@@ -1,32 +1,40 @@
-main : Account.o
+DMAP_FLAG :=
+ifeq ($(DMAP),1)
+    DMAP_FLAG := -D DMAP
+endif
 
+main : main.o Account.o Agent.o Attribute.o	Measurement.o Provider.o Sensor.o User.o SClass.o DataAccess.o
+	g++ $(DMAP_FLAG) -o main main.o Account.o Agent.o Attribute.o	Measurement.o Provider.o Sensor.o User.o SClass.o DataAccess.o
 
+main.o : main.cpp 
+	g++ $(DMAP_FLAG) -c main.cpp 
 
-______
-trajets : trajets.o Trajet.o TrajetSimple.o TrajetCompose.o Catalogue.o Liste.o Maillon.o
-		g++ -o trajets trajets.o Trajet.o TrajetSimple.o TrajetCompose.o Catalogue.o Liste.o Maillon.o -ansi -pedantic -Wall -std=c++11
+Account.o : Account.cpp
+	g++ $(DMAP_FLAG) -c Account.cpp
 
-trajets.o : trajets.cpp
-		g++ -c trajets.cpp
+Agent.o : Agent.cpp	
+	g++ $(DMAP_FLAG) -c Agent.cpp
 
-Catalogue.o : Catalogue.cpp
-		g++ -c Catalogue.cpp #-DMAP
+Attribute.o : Attribute.cpp	
+	g++ $(DMAP_FLAG) -c Attribute.cpp
 
-Liste.o : Liste.cpp
-		g++ -c Liste.cpp #-DMAP
+Measurement.o : Measurement.cpp
+	g++ $(DMAP_FLAG) -c Measurement.cpp
 
-Maillon.o : Maillon.cpp
-		g++ -c Maillon.cpp #-DMAP		
+Provider.o : Provider.cpp
+	g++ $(DMAP_FLAG) -c Provider.cpp
 
-Trajet.o : Trajet.cpp
-		g++ -c -g Trajet.cpp #-DMAP
+Sensor.o : Sensor.cpp
+	g++ $(DMAP_FLAG) -c Sensor.cpp
 
-TrajetCompose.o : TrajetCompose.cpp 
-		g++ -c TrajetCompose.cpp #-DMAP
+User.o : User.cpp
+	g++ $(DMAP_FLAG) -c User.cpp
 
-TrajetSimple.o : TrajetSimple.cpp 
-		g++ -c -g TrajetSimple.cpp #-DMAP
+SClass.o : SClass.cpp
+	g++ $(DMAP_FLAG) -c SClass.cpp
+
+DataAccess.o : DataAccess.cpp
+	g++ $(DMAP_FLAG) -c DataAccess.cpp
 
 clean :
-	rm -f trajets trajets.o Trajet.o TrajetSimple.o TrajetCompose.o Catalogue.o Liste.o Maillon.o
-
+	rm main main.o Account.o Agent.o Attribute.o Measurement.o Provider.o Sensor.o User.o SClass.o DataAccess.o
