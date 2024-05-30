@@ -23,7 +23,9 @@ using namespace std;
 #include "DataAccess.h"
 
 //----------------------------------------------------------------- PUBLIC
-
+// Define the base directory for the datasets
+const string baseDirectory = "dataset/";    
+    
 //--------------------------------------------------------- Public Methods
 // Helper function to parse CSV lines
 vector<string> split(const string& s, char delimiter) {
@@ -36,10 +38,12 @@ vector<string> split(const string& s, char delimiter) {
     return tokens;
 }
 
-int DataAccess::readSensorData(const string& csvFile, vector<Sensor>& sensors) {
-    ifstream file(csvFile); // Open the file
+int DataAccess::readSensorData(const string& csvFile, vector<Sensor>& sensors) {    
+    // Construct the full file path
+    string fullPath = baseDirectory + csvFile;
+    ifstream file(fullPath); // Open the file
     if (!file.is_open()) { // Check if the file is open
-        cerr << "Error opening file: " << csvFile << endl;
+        cerr << "Error opening file: " << fullPath << endl;
         return -1;
     }
     string line;
@@ -55,7 +59,9 @@ int DataAccess::readSensorData(const string& csvFile, vector<Sensor>& sensors) {
 } 
 
 int DataAccess::readMeasurementData(const string& csvFile, vector<Measurement>& measurements) {
-    ifstream file(csvFile);
+    // Construct the full file path
+    string fullPath = baseDirectory + csvFile;
+    ifstream file(fullPath);    
     if (!file.is_open()) {
         cerr << "Error opening file: " << csvFile << endl;
         return -1;
@@ -73,9 +79,11 @@ int DataAccess::readMeasurementData(const string& csvFile, vector<Measurement>& 
 } 
 
 int DataAccess::readAttributeData(const string& csvFile, vector<Attribute>& attributes) {
-    ifstream file(csvFile);
+    // Construct the full file path
+    string fullPath = baseDirectory + csvFile;
+    ifstream file(fullPath);
     if (!file.is_open()) {
-        cerr << "Error opening file: " << csvFile << endl;
+        cerr << "Error opening file: " << fullPath << endl;
         return -1;
     }
     string line;
@@ -147,16 +155,4 @@ DataAccess::~DataAccess() {
     cout << "Call to the destructor of <DataAccess>" << endl;
 #endif
 }
-DataAccess::DataAccess ( )
-{
-#ifdef MAP
-    cout << "Call to the constructor of <DataAccess>" << endl;
-#endif
-} //----- End of DataAccess
 
-DataAccess::~DataAccess ( )
-{
-#ifdef MAP
-    cout << "Call to the destructor of <DataAccess>" << endl;
-#endif
-} //----- End of ~DataAccess
