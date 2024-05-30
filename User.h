@@ -11,7 +11,7 @@ class User : public Account
 
 public:
 //----------------------------------------------------- Public Methods
-    getScore ( );
+    int getScore ( );
 
 //-------------------------------------------- Constructors - Destructor
     User ( );
