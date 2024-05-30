@@ -15,7 +15,7 @@ public:
     string getPassword ( );
     virtual ~Account ( );
 protected:
-    Account ( );
+    Account (string username, string password);
     string username;
     string password;
 };

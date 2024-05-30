@@ -21,12 +21,13 @@ string Account::getPassword ( )
     return password;
 } //----- End of getPassword
 
-Account::Account ( )
+Account::Account (string username, string password)
 {   
 #ifdef MAP
     cout << "Call to the constructor of <Account>" << endl;
 #endif
-
+this->username = username;
+this->password = password;
 } //----- End of Account
 
 Account::~Account ( )
