@@ -11,12 +11,6 @@ using namespace std;
 
 //----------------------------------------------------------------- PUBLIC
 
-//--------------------------------------------------------- Public Methods
-string Account::getID ( )
-{
-    return id;
-} //----- End of getID
-
 string Account::getUsername ( )
 {
     return username;
@@ -32,6 +26,7 @@ Account::Account ( )
 #ifdef MAP
     cout << "Call to the constructor of <Account>" << endl;
 #endif
+
 } //----- End of Account
 
 Account::~Account ( )

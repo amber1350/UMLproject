@@ -10,27 +10,12 @@ using namespace std;
 
 class Account
 {
-//----------------------------------------------------------------- PUBLIC
-
 public:
-//----------------------------------------------------- Public Methods
-    string getID ( );
-
     string getUsername ( );
-
     string getPassword ( );
-
-//-------------------------------------------- Destructor
     virtual ~Account ( );
-
-//------------------------------------------------------------------ PRIVATE
-
 protected:
-//-------------------------------------------- Constructors (abstract class)
     Account ( );
-
-//----------------------------------------------------- Protected Attributes
-    string id;
     string username;
     string password;
 };
