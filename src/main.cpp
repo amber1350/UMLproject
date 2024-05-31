@@ -203,6 +203,25 @@ int main() {
     } else {
         cout << "No data available for the specified parameters." << endl;
     }
+    cout << endl;
+
+
+    // Test Scenario 10    
+    cout << "Scenario 10: Ranking Sensors" << endl;
+
+    // Define parameters for ranking
+    string referenceSensorID = "Sensor0"; 
+    startTime = "2019-01-01 00:00:00";
+    endTime = "2019-01-02 23:59:59";
+
+    vector<pair<Sensor, float>> rankedSensors = sensorManagement.RankSensor(referenceSensorID, startTime, endTime, sensors, measurements, attributes);
+
+    // Output ranked sensors
+    cout << "Ranked sensors based on similarity to " << referenceSensorID << " from " << startTime << " to " << endTime << ":" << endl;
+    for (size_t i = 0; i < 98 && i < rankedSensors.size(); ++i) {
+        const auto& [sensor, similarity] = rankedSensors[i];
+        cout << "Sensor ID: " << sensor.getSensorID() << ", Similarity: " << similarity << endl;
+    }
 
     return 0;
 }

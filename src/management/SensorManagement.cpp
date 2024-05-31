@@ -53,33 +53,47 @@ void SensorManagement::MonitorSensor(const string& sensorID, const vector<Measur
     // Add logic to analyze data to ensure the sensor is functioning correctly
 }
 
-vector<pair<Sensor, float>> SensorManagement::RankSensor(const string& sensorID, const string& startTime, const string& endTime, const vector<Sensor>& sensors, const vector<Measurement>& measurements, const vector<Attribute>& attributes){
-    cout << "Ranking Sensor: " << sensorID << endl; 
-
-    // Get reference sensor and measurements
-    Sensor referenceSensor = GetSensorByID(sensorID, sensors);
-    vector<Measurement> refMeasurements = DataManagement().GetMeasurementsWithinTimePeriod(referenceSensor.getMeasurements(),startTime,endTime);
-
+vector<pair<Sensor, float>> SensorManagement::RankSensor(const string& referenceSensorID, const string& startTime, const string& endTime, const vector<Sensor>& sensors, const vector<Measurement>& measurements, const vector<Attribute>& attributes){
+    cout << "Ranking Sensor: " << referenceSensorID << endl; 
     vector<pair<Sensor, float>> sensorSimilarities;
+    // Get reference sensor
+    auto it = find_if(sensors.begin(), sensors.end(), [&](const Sensor& s) { return s.getSensorID() == referenceSensorID; });
+    if (it == sensors.end()) {
+        cerr << "Reference sensor not found." << endl;
+        return sensorSimilarities;
+    }
+    Sensor referenceSensor = *it;
 
+    // Get measurements for the reference sensor
+    vector<Measurement> refMeasurements;
+    for (const auto& measurement : referenceSensor.getMeasurements()) {
+        if (measurement.getTimestamp() >= startTime && measurement.getTimestamp() <= endTime) {
+            refMeasurements.push_back(measurement);
+        }
+    }
+
+    // Calculate similarity for each sensor
     for (const auto& sensor : sensors) {
-        if (sensor.getSensorID() == sensorID) {
-            continue; // Skip the reference sensor itself
+        if (sensor.getSensorID() == referenceSensorID) continue;
+
+        vector<Measurement> otherMeasurements;
+        for (const auto& measurement : sensor.getMeasurements()) {
+            if (measurement.getTimestamp() >= startTime && measurement.getTimestamp() <= endTime) {
+                otherMeasurements.push_back(measurement);
+            }
         }
 
-        vector<Measurement> otherMeasurements = DataManagement().GetMeasurementsWithinTimePeriod(measurements, startTime, endTime);
-
-        float similarity = CalculateSimilarity(attributes, refMeasurements, otherMeasurements);
+        float similarity = CalculateSimilarity(attributes,  refMeasurements, otherMeasurements);
         sensorSimilarities.emplace_back(sensor, similarity);
     }
 
+    // Sort sensors by similarity
     sort(sensorSimilarities.begin(), sensorSimilarities.end(), [](const pair<Sensor, float>& a, const pair<Sensor, float>& b) {
-        return a.second < b.second; // Sort in ascending order of similarity
+        return a.second < b.second;
     });
 
     return sensorSimilarities;
 }
-
 
 Sensor SensorManagement::GetSensorByID(const string& sensorID, const vector<Sensor>& sensors) {
     for (const auto& sensor : sensors) {
@@ -123,16 +137,13 @@ float SensorManagement::CalculateSimilarity(const vector<Attribute>& attributes,
     // Group measurements by their attribute IDs
     unordered_map<string, vector<float>> refValues, otherValues;
     
-    for (const auto& attribute : attributes) {
-        string attributeID = attribute.getAttributeID();
-        for (const auto& measurement : DataManagement().GetMeasurementsByAttribute(refMeasurements,attributeID)) {
-        refValues[attributeID].push_back(measurement.getValue());
-        }
+    for (const auto& measurement : refMeasurements) {
+        refValues[measurement.getAttributeID()].push_back(measurement.getValue());
+    }
 
-        for (const auto& measurement : DataManagement().GetMeasurementsByAttribute(otherMeasurements,attributeID)) {
-        otherValues[attributeID].push_back(measurement.getValue());
-        }
-    } 
+    for (const auto& measurement : otherMeasurements) {
+        otherValues[measurement.getAttributeID()].push_back(measurement.getValue());
+    }
 
     // Calculate Euclidean distance for corresponding attributes
     float similarity = 0.0;
