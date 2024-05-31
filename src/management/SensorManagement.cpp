@@ -13,10 +13,14 @@
 //-------------------------------------------------------- System Includes
 #include <iostream>
 #include <cmath>
+#include <unordered_map>
+#include <algorithm>
 using namespace std;
 
 //------------------------------------------------------ Personal Includes
 #include "SensorManagement.h"
+#include "DataManagement.h"
+
 
 //------------------------------------------------------------- Constants
 
@@ -49,11 +53,33 @@ void SensorManagement::MonitorSensor(const string& sensorID, const vector<Measur
     // Add logic to analyze data to ensure the sensor is functioning correctly
 }
 
-int SensorManagement::RankSensor(const string& sensorID, const vector<Measurement>& measurements) {
+vector<pair<Sensor, float>> SensorManagement::RankSensor(const string& sensorID, const string& startTime, const string& endTime, const vector<Sensor>& sensors, const vector<Measurement>& measurements, const vector<Attribute>& attributes){
     cout << "Ranking Sensor: " << sensorID << endl; 
-    // Add logic to analyze data to ensure the sensor is functioning correctly
-    return 0;
+
+    // Get reference sensor and measurements
+    Sensor referenceSensor = GetSensorByID(sensorID, sensors);
+    vector<Measurement> refMeasurements = DataManagement().GetMeasurementsWithinTimePeriod(referenceSensor.getMeasurements(),startTime,endTime);
+
+    vector<pair<Sensor, float>> sensorSimilarities;
+
+    for (const auto& sensor : sensors) {
+        if (sensor.getSensorID() == sensorID) {
+            continue; // Skip the reference sensor itself
+        }
+
+        vector<Measurement> otherMeasurements = DataManagement().GetMeasurementsWithinTimePeriod(measurements, startTime, endTime);
+
+        float similarity = CalculateSimilarity(attributes, refMeasurements, otherMeasurements);
+        sensorSimilarities.emplace_back(sensor, similarity);
+    }
+
+    sort(sensorSimilarities.begin(), sensorSimilarities.end(), [](const pair<Sensor, float>& a, const pair<Sensor, float>& b) {
+        return a.second < b.second; // Sort in ascending order of similarity
+    });
+
+    return sensorSimilarities;
 }
+
 
 Sensor SensorManagement::GetSensorByID(const string& sensorID, const vector<Sensor>& sensors) {
     for (const auto& sensor : sensors) {
@@ -93,3 +119,35 @@ vector<Sensor> SensorManagement::GetSensorWithinRadius(const pair<float, float>&
     return result;
 }
 
+float SensorManagement::CalculateSimilarity(const vector<Attribute>& attributes, const vector<Measurement>& refMeasurements, const vector<Measurement>& otherMeasurements) {
+    // Group measurements by their attribute IDs
+    unordered_map<string, vector<float>> refValues, otherValues;
+    
+    for (const auto& attribute : attributes) {
+        string attributeID = attribute.getAttributeID();
+        for (const auto& measurement : DataManagement().GetMeasurementsByAttribute(refMeasurements,attributeID)) {
+        refValues[attributeID].push_back(measurement.getValue());
+        }
+
+        for (const auto& measurement : DataManagement().GetMeasurementsByAttribute(otherMeasurements,attributeID)) {
+        otherValues[attributeID].push_back(measurement.getValue());
+        }
+    } 
+
+    // Calculate Euclidean distance for corresponding attributes
+    float similarity = 0.0;
+    int count = 0;
+
+    for (const auto& [attributeID, refVec] : refValues) {
+        if (otherValues.find(attributeID) != otherValues.end()) {
+            const auto& otherVec = otherValues[attributeID];
+            for (int i = 0; i < min(refVec.size(), otherVec.size()); ++i) {
+                similarity += pow(refVec[i] - otherVec[i], 2);
+                ++count;
+            }
+        }
+    }
+    // If count is greater than 0, compute the square root of the average squared difference to get the Euclidean distance.
+    // If no valid comparisons were made (count is 0), return the maximum possible float value to indicate dissimilarity.
+    return count > 0 ? sqrt(similarity / count) : numeric_limits<float>::max();
+}
