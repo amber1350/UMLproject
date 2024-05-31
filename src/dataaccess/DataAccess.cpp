@@ -89,8 +89,6 @@ int DataAccess::readAttributeData(const string& csvFile, vector<Attribute>& attr
     while (getline(file, line)) {     
         auto tokens = split(line, ';');   
         if (tokens.size() == 4) {
-            cout << line << endl;
-            cout << Attribute(tokens[0], tokens[1], tokens[2]) << endl;             
             attributes.push_back(Attribute(tokens[0], tokens[1], tokens[2]));
         }
     }    

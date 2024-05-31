@@ -44,9 +44,9 @@ int main() {
         if (!sensors.empty()) {
             vector<Measurement> sensorMeasurements = sensors[0].getMeasurements(measurements);
             cout << "Measurements for Sensor ID: " << sensors[0].getSensorID() << endl;
-            for (const auto& measurement : sensorMeasurements) {
-                cout << measurement << endl;
-            }
+            for (int i=0; i<5; i++) {
+                cout << sensorMeasurements[i] << endl;
+            }   
         }
         
     } else {
