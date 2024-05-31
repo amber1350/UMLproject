@@ -42,7 +42,7 @@ public:
 
 //--------------------------------------------------- Other 
     // Methods
-    float GenerateMean(const vector<Measurement>& measurements, float radius, const pair<float, float>& center, const string& startTime, const string& endTime);
+    float GenerateMean(const vector<Sensor>& sensors,const vector<Measurement>& measurements, float radius, const pair<float, float>& center, const string& startTime, const string& endTime);
     float MeasureAirQuality(float radius, const pair<float, float>& center);
     vector<Measurement> GetMeasurementsByAttribute(const vector<Measurement>& measurements, const string& attributeID);
     vector<Measurement> GetMeasurementsWithinTimePeriod(const vector<Measurement>& measurements, const string& startTime, const string& endTime);

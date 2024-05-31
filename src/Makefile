@@ -6,8 +6,8 @@ endif
 
 all: main test
 
-main: test main.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o SensorManagement.o
-	g++ -o test main.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o SensorManagement.o
+main: test main.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o SensorManagement.o DataManagement.o
+	g++ -o test main.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o SensorManagement.o DataManagement.o
 
 main.o: main.cpp
 	g++ $(DMAP_FLAG) -c main.cpp
@@ -42,6 +42,8 @@ DataAccess.o: dataaccess/DataAccess.cpp
 SensorManagement.o: management/SensorManagement.cpp
 	g++ $(DMAP_FLAG) -c management/SensorManagement.cpp
 
+DataManagement.o: management/DataManagement.cpp
+	g++ $(DMAP_FLAG) -c management/DataManagement.cpp
 
 clean:
 	rm -f *.o main test

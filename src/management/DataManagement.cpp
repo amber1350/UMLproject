@@ -21,6 +21,7 @@ using namespace std;
 
 //------------------------------------------------------ Personal Includes
 #include "DataManagement.h"
+#include "SensorManagement.h"
 
 //------------------------------------------------------------- Constants
 
@@ -47,11 +48,51 @@ DataManagement::~DataManagement ( )
 #endif
 } //----- End of ~Sensor
 
+float DataManagement::GenerateMean(const vector<Sensor>& sensors, const vector<Measurement>& measurements, float radius, const pair<float, float>& center, const string& startTime, const string& endTime) {
+    // Initialize means for pollutants
+    float meanO3 = 0, meanSO2 = 0, meanNO2 = 0, meanPM10 = 0;
 
-float DataManagement::GenerateMean(const vector<Measurement>& measurements, float radius, const pair<float, float>& center, const string& startTime, const string& endTime) {
-    return 0;
+    // Get sensors within the specified radius
+    SensorManagement sensorManagement;
+    vector<Sensor> sensorsFiltered = sensorManagement.GetSensorWithinRadius(center, radius, sensors);
+
+    // Collect all measurements from sensors within the radius
+    vector<Measurement> allMeasurements;
+    for (const Sensor& sensor : sensorsFiltered) {
+        vector<Measurement> sensorMeasurements = sensor.getMeasurements();
+        allMeasurements.insert(allMeasurements.end(), sensorMeasurements.begin(), sensorMeasurements.end());
+    }
+
+    // Filter measurements by the specified time period
+    allMeasurements = GetMeasurementsWithinTimePeriod(allMeasurements, startTime, endTime);
+
+    // Separate measurements by attribute
+    vector<Measurement> measurementsO3 = GetMeasurementsByAttribute(allMeasurements, "O3");
+    vector<Measurement> measurementsSO2 = GetMeasurementsByAttribute(allMeasurements, "SO2");
+    vector<Measurement> measurementsNO2 = GetMeasurementsByAttribute(allMeasurements, "NO2");
+    vector<Measurement> measurementsPM10 = GetMeasurementsByAttribute(allMeasurements, "PM10");
+
+    // Calculate means
+    int n = measurementsO3.size();
+    if (n > 0) {
+        for (int i = 0; i < n; i++) {
+            meanO3 += measurementsO3[i].getValue();
+            meanSO2 += measurementsSO2[i].getValue();
+            meanNO2 += measurementsNO2[i].getValue();
+            meanPM10 += measurementsPM10[i].getValue();
+        }
+        meanO3 /= n;
+        meanSO2 /= n;
+        meanNO2 /= n;
+        meanPM10 /= n;
+
+        // Calculate ATMO index
+        return ATMO(meanO3, meanSO2, meanNO2, meanPM10);
+    }
+
+    // Return null or some indicator of no data if n == 0
+    return -1;
 }
-
 
 float DataManagement::MeasureAirQuality(float radius, const pair<float, float>& center) {
     // Placeholder implementation: Measure air quality index within a radius from the center
