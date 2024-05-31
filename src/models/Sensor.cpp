@@ -56,24 +56,21 @@ float Sensor::getLongitude() const {
     return longitude;
 }
 
-// Implementation of getMeasurements method
-vector<Measurement> Sensor::getMeasurements(const vector<Measurement>& measurements) const {
-    vector<Measurement> sensorMeasurements;
+vector<Measurement> Sensor::getMeasurements() const {
+    return measurements;
+}
+
+void Sensor::setMeasurements(const vector<Measurement>& measurements) {
     for (const auto& measurement : measurements) {
         if (measurement.getSensorID() == sensorID) {
-            sensorMeasurements.push_back(measurement);
+            this->measurements.push_back(measurement);
         }
     }
-    return sensorMeasurements;
 }
 
 // Overloaded << operator
 ostream& operator<<(ostream& os, const Sensor& s) {
-    os << "SensorID: " << s.sensorID << ", Latitude: " << s.latitude << ", Longitude: " << s.longitude << ", Measurements: [";
-    for (const auto& measurement : s.measurements) {
-        os << measurement << ", ";
-    }
-    os << "]";
+    os << "SensorID: " << s.sensorID << ", Latitude: " << s.latitude << ", Longitude: " << s.longitude;
     return os;
 }
 

@@ -1,19 +1,21 @@
 /*************************************************************************
-                           SensorManagement  -  Description
+                           DataManagement  -  Description
                              -------------------
     Start Date          : $DATE$
     Copyright           : (C) $YEAR$ by $AUTHOR$
     Email               : $EMAIL$
 *************************************************************************/
 
-//---------- Class Interface of <SensorManagement> (file SensorManagement.h) -----------------------
-#if ! defined ( SensorManagement_H )
-#define SensorManagement_H
+//---------- Class Interface of <DataManagement> (file DataManagement.h) -----------------------
+#if ! defined ( DataManagement_H )
+#define DataManagement_H
 
 //------------------------------------------------------- Used Interfaces
 #include <string>
 #include <vector>
+#include "../models/Measurement.h"
 #include "../models/Sensor.h"
+
 
 using namespace std; 
 //------------------------------------------------------------- Constants
@@ -21,11 +23,11 @@ using namespace std;
 //------------------------------------------------------------------Types
 
 //-----------------------------------------------------------------------
-// Role of the class <SensorManagement>
+// Role of the class <DataManagement>
 //
 //
 //------------------------------------------------------------------------
-class SensorManagement 
+class DataManagement 
 {
 //----------------------------------------------------------------- PUBLIC
 
@@ -35,18 +37,19 @@ public:
 //------------------------------------------------- Operator Overloading
 
 //-------------------------------------------- Constructors - Destructor
-    SensorManagement();       
-    virtual ~SensorManagement ( );
+    DataManagement();       
+    virtual ~DataManagement ( );
 
 //--------------------------------------------------- Other 
-    void MonitorSensor(const string& sensorID, const vector<Measurement>& measurements);
-    int RankSensor(const string& sensorID, const vector<Measurement>& measurements);
-    Sensor GetSensorByID(const string& sensorID, const vector<Sensor>& sensors);
-    vector<Sensor> GetSensorWithinRadius(const pair<float, float>& center, float radius, const vector<Sensor>& sensors);
+    // Methods
+    float GenerateMean(const vector<Measurement>& measurements, float radius, const pair<float, float>& center, const string& startTime, const string& endTime);
+    float MeasureAirQuality(float radius, const pair<float, float>& center);
+    vector<Measurement> GetMeasurementsByAttribute(const vector<Measurement>& measurements, const string& attributeID);
+    vector<Measurement> GetMeasurementsWithinTimePeriod(const vector<Measurement>& measurements, const string& startTime, const string& endTime);
+    int ATMO(float O3, float SO2, float NO2, float PM10);
 
 protected:
 //----------------------------------------------------- Protected Methods
-    float CalculateDistance(float lat1, float lon1, float lat2, float lon2);
 };
 
-#endif // SensorManagement_H
+#endif // DataManagement_H
