@@ -16,13 +16,14 @@
 #include "dataaccess/DataAccess.h"
 
 #include "management/SensorManagement.h"
+#include "management/DataManagement.h"
 
 using namespace std;
 
 int main() {
     DataAccess dataAccess;
     SensorManagement sensorManagement;
-
+    DataManagement dataManagement;
     
     // Test reading measurements
     vector<Measurement> measurements;
@@ -138,6 +139,24 @@ int main() {
         cout << sensor << endl;
     }
     cout << endl;
+
+    // Test Scenario 6
+    cout << "Scenario 6: Calculating mean" << endl;
+    // Define parameters
+    float radius = 50.0;
+    pair<float, float> center = {44.8, 2.5};
+    string startTime = "2019-01-01 00:00:00"; 
+    string endTime = "2019-01-02 23:59:59"; 
+
+    // Create DataManagement instance and calculate mean
+    float mean = dataManagement.GenerateMean(sensors, measurements, radius, center, startTime, endTime);
+
+    // Output result
+    if (mean != -1) {
+        cout << "Mean Air Quality Index: " << mean << endl;
+    } else {
+        cout << "No data available for the specified parameters." << endl;
+    }
 
     return 0;
 }

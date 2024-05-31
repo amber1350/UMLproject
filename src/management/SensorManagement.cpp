@@ -88,7 +88,6 @@ vector<Sensor> SensorManagement::GetSensorWithinRadius(const pair<float, float>&
         float distance = CalculateDistance(center.first, center.second, sensor.getLatitude(), sensor.getLongitude());
         if (distance <= radius) {
             result.push_back(sensor);
-            cout << "Found sensor at " << distance <<"km !" <<endl;
         }
     }
     return result;

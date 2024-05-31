@@ -57,20 +57,20 @@ float DataManagement::GenerateMean(const vector<Sensor>& sensors, const vector<M
     vector<Sensor> sensorsFiltered = sensorManagement.GetSensorWithinRadius(center, radius, sensors);
 
     // Collect all measurements from sensors within the radius
-    vector<Measurement> allMeasurements;
+    vector<Measurement> measurementsFiltered;    
     for (const Sensor& sensor : sensorsFiltered) {
         vector<Measurement> sensorMeasurements = sensor.getMeasurements();
-        allMeasurements.insert(allMeasurements.end(), sensorMeasurements.begin(), sensorMeasurements.end());
+        measurementsFiltered.insert(measurementsFiltered.end(), sensorMeasurements.begin(), sensorMeasurements.end());
     }
 
     // Filter measurements by the specified time period
-    allMeasurements = GetMeasurementsWithinTimePeriod(allMeasurements, startTime, endTime);
+    measurementsFiltered = GetMeasurementsWithinTimePeriod(measurementsFiltered, startTime, endTime);
 
     // Separate measurements by attribute
-    vector<Measurement> measurementsO3 = GetMeasurementsByAttribute(allMeasurements, "O3");
-    vector<Measurement> measurementsSO2 = GetMeasurementsByAttribute(allMeasurements, "SO2");
-    vector<Measurement> measurementsNO2 = GetMeasurementsByAttribute(allMeasurements, "NO2");
-    vector<Measurement> measurementsPM10 = GetMeasurementsByAttribute(allMeasurements, "PM10");
+    vector<Measurement> measurementsO3 = GetMeasurementsByAttribute(measurementsFiltered, "O3");
+    vector<Measurement> measurementsSO2 = GetMeasurementsByAttribute(measurementsFiltered, "SO2");
+    vector<Measurement> measurementsNO2 = GetMeasurementsByAttribute(measurementsFiltered, "NO2");
+    vector<Measurement> measurementsPM10 = GetMeasurementsByAttribute(measurementsFiltered, "PM10");
 
     // Calculate means
     int n = measurementsO3.size();
@@ -85,7 +85,7 @@ float DataManagement::GenerateMean(const vector<Sensor>& sensors, const vector<M
         meanSO2 /= n;
         meanNO2 /= n;
         meanPM10 /= n;
-
+        cout << "Mean calculated using " << sensorsFiltered.size() <<" sensors and " <<  n << " measurements per attribute" << endl;
         // Calculate ATMO index
         return ATMO(meanO3, meanSO2, meanNO2, meanPM10);
     }
@@ -125,15 +125,15 @@ bool CompareTimestamps(const string& t1, const string& t2) {
     // Compare two timestamp strings
     tm tm1 = StringToTime(t1);
     tm tm2 = StringToTime(t2);
-    // mktime(&tm1) converts the std::tm structure to a time_t value, which represents the number of seconds since the Unix epoch (January 1, 1970).
-    //difftime calculates the difference in seconds between the two time_t values.
+    // mktime(&tm1) : converts the std::tm structure to a time_t value, which represents the number of seconds since the Unix epoch (January 1, 1970).
+    // difftime : calculates the difference in seconds between the two time_t values.
     return difftime(mktime(&tm1), mktime(&tm2)) < 0;
 }
 
 vector<Measurement> DataManagement::GetMeasurementsWithinTimePeriod(const vector<Measurement>& measurements, const string& startTime, const string& endTime) {
     vector<Measurement> result;
     for (const Measurement& measurement : measurements) {
-        if (CompareTimestamps(measurement.getTimestamp(), startTime) && CompareTimestamps(measurement.getTimestamp(), endTime)) {            
+        if (!CompareTimestamps(measurement.getTimestamp(), startTime) && CompareTimestamps(measurement.getTimestamp(), endTime)) {            
             result.push_back(measurement);
         }
     }
