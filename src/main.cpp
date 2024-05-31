@@ -141,15 +141,45 @@ int main() {
     cout << endl;
 
     // Test Scenario 6
-    cout << "Scenario 6: Calculating mean" << endl;
+    cout << "Scenario 6: Calculating mean for a specified period of time" << endl;
     // Define parameters
     float radius = 50.0;
     pair<float, float> center = {44.8, 2.5};
     string startTime = "2019-01-01 00:00:00"; 
     string endTime = "2019-01-02 23:59:59"; 
+    float mean;  
+    // Create DataManagement instance and calculate mean
+    mean = dataManagement.GenerateMean(sensors, measurements, radius, center, startTime, endTime);
+    // Output result
+    if (mean != -1) {
+        cout << "Mean Air Quality Index: " << mean << endl;
+    } else {
+        cout << "No data available for the specified parameters." << endl;
+    }
+
+    // Test Scenario 7
+    cout << "Scenario 7: Calculating mean with no data available" << endl;
+    // Define parameters
+    endTime = "2019-01-01 00:00:10"; 
 
     // Create DataManagement instance and calculate mean
-    float mean = dataManagement.GenerateMean(sensors, measurements, radius, center, startTime, endTime);
+    mean = dataManagement.GenerateMean(sensors, measurements, radius, center, startTime, endTime);
+
+    // Output result
+    if (mean != -1) {
+        cout << "Mean Air Quality Index: " << mean << endl;
+    } else {
+        cout << "No data available for the specified parameters." << endl;
+    }
+
+    // Test Scenario 8
+    cout << "Scenario 8: Calculating mean for a given moment" << endl;
+    // Define parameters
+    startTime = "2019-01-01 12:00:00;"; 
+    endTime = "2019-01-01 12:00:00;"; 
+
+    // Create DataManagement instance and calculate mean
+    mean = dataManagement.GenerateMean(sensors, measurements, radius, center, startTime, endTime);
 
     // Output result
     if (mean != -1) {

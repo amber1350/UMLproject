@@ -4,9 +4,9 @@ ifeq ($(DMAP),1)
     DMAP_FLAG := -D DMAP
 endif
 
-all: main test
+all: main
 
-main: testmain.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o SensorManagement.o DataManagement.o
+main: main.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o SensorManagement.o DataManagement.o
 	g++ -std=c++17 -o test main.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o SensorManagement.o DataManagement.o
 
 main.o: main.cpp
@@ -46,4 +46,4 @@ DataManagement.o: management/DataManagement.cpp
 	g++ -std=c++17 $(DMAP_FLAG) -c management/DataManagement.cpp
 
 clean:
-	rm -f *.o main test
+	rm -f *.o main
