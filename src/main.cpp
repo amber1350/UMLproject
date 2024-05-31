@@ -186,6 +186,22 @@ int main() {
         cout << "Mean Air Quality Index: " << mean << endl;
     } else {
         cout << "No data available for the specified parameters." << endl;
+    }    
+
+    // Test Scenario 9
+    cout << endl;
+    cout << "Scenario 9: Calculating AirQuality" << endl;
+    // Define parameters
+    pair<float, float> position = {44.8, 2.5};
+    string timestamp = "2019-01-01 12:00:00";
+
+    float airQuality = dataManagement.MeasureAirQuality(measurements, sensors, position, timestamp);
+
+    // Output result
+    if (airQuality != -1) {
+        cout << "Air Quality Index at position (" << position.first << ", " << position.second << ") at " << timestamp << " is " << airQuality << endl;
+    } else {
+        cout << "No data available for the specified parameters." << endl;
     }
 
     return 0;

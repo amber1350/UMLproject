@@ -148,7 +148,7 @@ float DataManagement::MeasureAirQuality(const vector<Measurement>& measurements,
         meanSO2 /= n;
         meanNO2 /= n;
         meanPM10 /= n;
-        cout << "Mean calculated using " << nearbySensors.size() <<" sensors and " <<  n << " measurements per attribute" << endl;
+        cout << "AirQuality measured using " << nearbySensors.size() <<" sensors found in a " << radius << "km radius and " <<  n << " measurements per attribute" << endl;
         // Calculate ATMO index
         return ATMO(meanO3, meanSO2, meanNO2, meanPM10);
     }    
