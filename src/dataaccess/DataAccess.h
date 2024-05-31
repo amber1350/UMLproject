@@ -12,15 +12,19 @@
 
 //------------------------------------------------------- Used Interfaces
 #include <string>
-using namespace std; 
-#include <string>
 #include <vector>
-#include "Measurement.h"
-#include "Sensor.h"
-#include "Attribute.h"
+using namespace std; 
 
+#include "../models/Account.h"
+#include "../models/Agent.h"
+#include "../models/Attribute.h"
+#include "../models/Measurement.h"
+#include "../models/Sensor.h"
+#include "../models/Provider.h"
+#include "../models/Cleaner.h"
+#include "../models/User.h"
 //------------------------------------------------------------- Constants
-
+const string baseDirectory = "../dataset/";
 //------------------------------------------------------------------Types
 
 class DataAccess
@@ -32,15 +36,15 @@ public:
     int readSensorData(const string& csvFile, vector<Sensor>& sensors);
     int readMeasurementData(const string& csvFile, vector<Measurement>& measurements);
     int readAttributeData(const string& csvFile, vector<Attribute>& attributes);
-    int readProviderData(const string& csvFile);
-    int readCleanerData(const string& csvFile);
-    int readUserData(const string& csvFile);
+    int readProviderData(const string& csvFile, vector<Provider>& providers);
+    int readCleanerData(const string& csvFile, vector<Cleaner>& cleaners);
+    int readUserData(const string& csvFile, vector<User>& users);
     int writeSensorData(const string& csvFile, const vector<Sensor>& sensors);
     int writeMeasurementData(const string& csvFile, const vector<Measurement>& measurements);
     int writeAttributeData(const string& csvFile, const vector<Attribute>& attributes);
-    int writeProviderData(const string& csvFile);
-    int writeCleanerData(const string& csvFile);
-    int writeUserData(const string& csvFile);
+    int writeProviderData(const string& csvFile, const vector<Provider>& providers);
+    // int writeCleanerData(const string& csvFile, const vector<Cleaner>& cleaners);
+    int writeUserData(const string& csvFile, const vector<User>& users);
 
 //-------------------------------------------- Constructors - Destructor
     DataAccess ( );

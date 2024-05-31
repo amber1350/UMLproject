@@ -1,12 +1,12 @@
 #include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <string>
-
-#include "DataAccess.h"
-#include "Measurement.h"
-#include "Sensor.h"
+#include "models/Account.h"
+#include "models/Agent.h"
+#include "models/Attribute.h"
+#include "dataaccess/DataAccess.h"
+#include "models/Measurement.h"
+#include "models/Provider.h"
+#include "models/User.h"
+#include "models/Sensor.h"
 
 
 using namespace std;
@@ -31,6 +31,7 @@ int main() {
     } else {
         cout << "Failed to load measurement data." << endl;
     }
+    
 
     return 0;
 }

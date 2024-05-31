@@ -47,8 +47,7 @@ public:
     const string & getSensorID() const;
     float getLatitude() const;
     float getLongitude() const;
-    vector<Measurement> getMeasurements() const;
-
+    vector<Measurement> getMeasurements(const vector<Measurement>& measurements) const;
 
 //------------------------------------------------------------------ PRIVATE
 

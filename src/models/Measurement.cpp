@@ -44,17 +44,22 @@ Measurement::~Measurement ( )
 } //----- End of ~Measurement
 
 // Getters
-const std::string & Measurement::GetTimestamp() const
+const string & Measurement::getTimestamp() const
 {
     return timestamp;
 }
 
-const std::string & Measurement::GetAttributeID() const
+const string & Measurement::getSensorID() const
+{
+    return sensorID;
+}
+
+const string & Measurement::getAttributeID() const
 {
     return attributeID;
 }
 
-float Measurement::GetValue() const
+float Measurement::getValue() const
 {
     return value;
 }

@@ -41,9 +41,10 @@ public:
     virtual ~Measurement ( );
     
 //-------------------------------------------- Getters
-    const std::string & GetTimestamp() const;
-    const std::string & GetAttributeID() const;
-    float GetValue() const;
+    const string & getTimestamp() const;
+    const string & getSensorID() const;
+    const string & getAttributeID() const;
+    float getValue() const;
 
 //------------------------------------------------------------------ PRIVATE
 

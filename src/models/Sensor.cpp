@@ -56,8 +56,15 @@ float Sensor::getLongitude() const {
     return longitude;
 }
 
-vector<Measurement> Sensor::getMeasurements() const {
-    return measurements;
+// Implementation of getMeasurements method
+vector<Measurement> Sensor::getMeasurements(const vector<Measurement>& measurements) const {
+    vector<Measurement> sensorMeasurements;
+    for (const auto& measurement : measurements) {
+        if (measurement.getSensorID() == sensorID) {
+            sensorMeasurements.push_back(measurement);
+        }
+    }
+    return sensorMeasurements;
 }
 
 // Overloaded << operator
