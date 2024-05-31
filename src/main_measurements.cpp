@@ -7,17 +7,22 @@
 #include "models/Account.h"
 #include "models/Agent.h"
 #include "models/Attribute.h"
-#include "dataaccess/DataAccess.h"
 #include "models/Measurement.h"
 #include "models/Provider.h"
 #include "models/User.h"
 #include "models/Sensor.h"
 #include "models/Cleaner.h"
 
+#include "dataaccess/DataAccess.h"
+
+#include "management/SensorManagement.h"
+
 using namespace std;
 
 int main() {
     DataAccess dataAccess;
+    SensorManagement sensorManagement;
+
     
     // Test reading measurements
     vector<Measurement> measurements;
@@ -30,6 +35,7 @@ int main() {
     } else {
         cout << "Failed to load measurement data." << endl;
     }
+    cout << endl;
 
     // Test reading sensors
     vector<Sensor> sensors;
@@ -52,6 +58,7 @@ int main() {
     } else {
         cout << "Failed to load sensor data." << endl;
     }
+    cout << endl;
 
     // Test reading attributes
     vector<Attribute> attributes;
@@ -64,6 +71,8 @@ int main() {
     } else {
         cout << "Failed to load cleaner data." << endl;
     }
+    cout << endl;
+
 
     // Test reading cleaners
     vector<Cleaner> cleaners;
@@ -76,6 +85,57 @@ int main() {
     } else {
         cout << "Failed to load cleaner data." << endl;
     }
+    cout << endl;
+
+    // Test Scenario 1
+    cout << "Scenario 1: Center at (44, -1), Radius = 10 km" << endl;
+    pair<float, float> center1 = {44, -1};
+    float radius1 = 10.0; // in km
+    vector<Sensor> result1 = sensorManagement.GetSensorWithinRadius(center1, radius1, sensors);
+    for (const auto& sensor : result1) {
+        cout << sensor << endl;
+    }
+    cout << endl;
+
+    // Test Scenario 2
+    cout << "Scenario 2: Center at (44, -0.3), Radius = 10 km" << endl;
+    pair<float, float> center2 = {44, -0.3};
+    float radius2 = 10.0; // in km
+    vector<Sensor> result2 = sensorManagement.GetSensorWithinRadius(center2, radius2, sensors);
+    for (const auto& sensor : result2) {
+        cout << sensor << endl;
+    }
+    cout << endl;
+
+    // Test Scenario 3
+    cout << "Scenario 3: Center at (44.4, 1.8), Radius = 10 km" << endl;
+    pair<float, float> center3 = {44.4, 1.8};
+    float radius3 = 10.0; // in km
+    vector<Sensor> result3 = sensorManagement.GetSensorWithinRadius(center3, radius3, sensors);
+    for (const auto& sensor : result3) {
+        cout << sensor << endl;
+    }
+    cout << endl;
+
+    // Test Scenario 4
+    cout << "Scenario 4: Center at (46, 2.5), Radius = 10 km" << endl;
+    pair<float, float> center4 = {46, 2.5};
+    float radius4 = 10.0; // in km
+    vector<Sensor> result4 = sensorManagement.GetSensorWithinRadius(center4, radius4, sensors);
+    for (const auto& sensor : result4) {
+        cout << sensor << endl;
+    }
+    cout << endl;
+
+    // Test Scenario 5
+    cout << "Scenario 5: Center at (44.8, 2.5), Radius = 50 km" << endl;
+    pair<float, float> center5 = {44.8, 2.5};
+    float radius5 = 50.0; // in km
+    vector<Sensor> result5 = sensorManagement.GetSensorWithinRadius(center5, radius5, sensors);
+    for (const auto& sensor : result5) {
+        cout << sensor << endl;
+    }
+    cout << endl;
 
     return 0;
 }

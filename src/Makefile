@@ -6,11 +6,11 @@ endif
 
 all: main test
 
-main: main.o Account.o Agent.o Attribute.o Measurement.o Provider.o Sensor.o User.o DataAccess.o
+main: main.o Account.o Agent.o Attribute.o Measurement.o Provider.o Sensor.o User.o DataAccess.o 
 	g++ -o main main.o Account.o Agent.o Attribute.o Measurement.o Provider.o Sensor.o User.o DataAccess.o
 
-test: main_measurements.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o
-	g++ -o test main_measurements.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o
+test: main_measurements.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o SensorManagement.o
+	g++ -o test main_measurements.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o SensorManagement.o
 
 main.o: main.cpp
 	g++ $(DMAP_FLAG) -c main.cpp
@@ -44,6 +44,10 @@ User.o: models/User.cpp
 
 DataAccess.o: dataaccess/DataAccess.cpp
 	g++ $(DMAP_FLAG) -c dataaccess/DataAccess.cpp
+
+SensorManagement.o: management/SensorManagement.cpp
+	g++ $(DMAP_FLAG) -c management/SensorManagement.cpp
+
 
 clean:
 	rm -f *.o main test
