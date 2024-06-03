@@ -39,12 +39,7 @@ public:
     int readProviderData(const string& csvFile, vector<Provider>& providers);
     int readCleanerData(const string& csvFile, vector<Cleaner>& cleaners);
     int readUserData(const string& csvFile, vector<User>& users);
-    int writeSensorData(const string& csvFile, const vector<Sensor>& sensors);
-    int writeMeasurementData(const string& csvFile, const vector<Measurement>& measurements);
-    int writeAttributeData(const string& csvFile, const vector<Attribute>& attributes);
-    int writeProviderData(const string& csvFile, const vector<Provider>& providers);
-    // int writeCleanerData(const string& csvFile, const vector<Cleaner>& cleaners);
-    int writeUserData(const string& csvFile, const vector<User>& users);
+    
 
 //-------------------------------------------- Constructors - Destructor
     DataAccess ( );
