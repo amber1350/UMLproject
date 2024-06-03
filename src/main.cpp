@@ -83,7 +83,9 @@ int main() {
     if (cleanerResult == 0) {
         cout << "Cleaner data loaded successfully." << endl;
         for (const Cleaner& cleaner : cleaners) {
-            cout << cleaner << endl;
+
+            // vector<Sensor> nearbysensor = sensorManagement.GetSensorWithinRadius(center1, radius1, sensors);
+            cout << cleaner.GetLatitude() << endl;
         }
     } else {
         cout << "Failed to load cleaner data." << endl;
@@ -221,20 +223,6 @@ int main() {
     for (size_t i = 0; i < 98 && i < rankedSensors.size(); ++i) {
         const auto& [sensor, similarity] = rankedSensors[i];
         cout << "Sensor ID: " << sensor.getSensorID() << ", Similarity: " << similarity << endl;
-    }
-
-    vector<Cleaner> cleaners = readCleaners("cleaners.csv");
-    vector<Measurement> measurements = readMeasurements("measurements.csv");
-
-    SensorManagement sensorManagement;
-
-    for (const auto& cleaner : cleaners) {
-        double improvement = sensorManagement.CalculateAirQualityChange(cleaner, measurements);
-        if (improvement > 0) {
-            cout << "Cleaner " << cleaner.GetCleanerID() << " improved air quality by " << improvement << " units." << endl;
-        } else {
-            cout << "Cleaner " << cleaner.GetCleanerID() << " did not improve air quality." << endl;
-        }
     }
 
     return 0;
