@@ -161,4 +161,25 @@ float SensorManagement::CalculateSimilarity(const vector<Attribute>& attributes,
     // If count is greater than 0, compute the square root of the average squared difference to get the Euclidean distance.
     // If no valid comparisons were made (count is 0), return the maximum possible float value to indicate dissimilarity.
     return count > 0 ? sqrt(similarity / count) : numeric_limits<float>::max();
+
+    double SensorManagement::CalculateAirQualityChange(const Cleaner& cleaner, const std::vector<Measurement>& measurements, float radius) {
+    double beforeSum = 0.0, afterSum = 0.0;
+    int beforeCount = 0, afterCount = 0;
+
+    for (const auto& measurement : measurements) {
+        if (CalculateDistance(cleaner.GetLatitude(), cleaner.GetLongitude(), measurement.GetLatitude(), measurement.GetLongitude()) <= radius) {
+            if (measurement.GetTimestamp() < std::mktime(&std::tm{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, cleaner.GetTimestampStart()})) {
+                beforeSum += measurement.GetValue();
+                beforeCount++;
+            } else if (measurement.GetTimestamp() > std::mktime(&std::tm{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, cleaner.GetTimestampStop()})) {
+                afterSum += measurement.GetValue();
+                afterCount++;
+            }
+        }
+    }
+
+    double beforeMean = (beforeCount > 0) ? beforeSum / beforeCount : 0;
+    double afterMean = (afterCount > 0) ? afterSum / afterCount : 0;
+
+    return beforeMean - afterMean;
 }

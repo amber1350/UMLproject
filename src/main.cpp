@@ -223,5 +223,19 @@ int main() {
         cout << "Sensor ID: " << sensor.getSensorID() << ", Similarity: " << similarity << endl;
     }
 
+    vector<Cleaner> cleaners = readCleaners("cleaners.csv");
+    vector<Measurement> measurements = readMeasurements("measurements.csv");
+
+    SensorManagement sensorManagement;
+
+    for (const auto& cleaner : cleaners) {
+        double improvement = sensorManagement.CalculateAirQualityChange(cleaner, measurements);
+        if (improvement > 0) {
+            cout << "Cleaner " << cleaner.GetCleanerID() << " improved air quality by " << improvement << " units." << endl;
+        } else {
+            cout << "Cleaner " << cleaner.GetCleanerID() << " did not improve air quality." << endl;
+        }
+    }
+
     return 0;
 }

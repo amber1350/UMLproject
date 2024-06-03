@@ -15,6 +15,7 @@
 #include <vector>
 #include "../models/Sensor.h"
 #include "../models/Attribute.h"
+#include "../models/Cleaner.h"
 
 using namespace std; 
 //------------------------------------------------------------- Constants
@@ -44,6 +45,7 @@ public:
     vector<pair<Sensor, float>> RankSensor(const string& sensorID, const string& startTime, const string& endTime, const vector<Sensor>& sensors, const vector<Measurement>& measurements, const vector<Attribute>& attributes);
     Sensor GetSensorByID(const string& sensorID, const vector<Sensor>& sensors);
     vector<Sensor> GetSensorWithinRadius(const pair<float, float>& center, float radius, const vector<Sensor>& sensors);
+    double CalculateAirQualityChange(const Cleaner& cleaner, const std::vector<Measurement>& measurements, float radius = 0.1);
 
 protected:
 //----------------------------------------------------- Protected Methods
