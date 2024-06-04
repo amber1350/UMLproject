@@ -1,3 +1,10 @@
+/*************************************************************************
+                           Provider  -  Description
+                             -------------------
+    Start Date          : $DATE$
+    Copyright           : (C) $YEAR$ by $AUTHOR$
+    Email               : $EMAIL$
+*************************************************************************/
 //---------- Class Interface of <Provider> (file Provider.h) -----------------------
 #if ! defined ( PROVIDER_H )
 #define PROVIDER_H
