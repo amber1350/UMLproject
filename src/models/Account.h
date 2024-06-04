@@ -23,7 +23,8 @@ public:
     string getPassword ( );
     virtual ~Account ( );
 protected:
-    Account (string username, string password);
+    Account (string username, string password, string accountID);
+    string accountID;
     string username;
     string password;
 };

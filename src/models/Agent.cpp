@@ -1,3 +1,11 @@
+/*************************************************************************
+                           Agent  -  Description
+                             -------------------
+    Start Date          : $DATE$
+    Copyright           : (C) $YEAR$ by $AUTHOR$
+    Email               : $EMAIL$
+*************************************************************************/
+
 //---------- Realisation of the class <Agent> (file Agent.cpp) ------------
 
 //---------------------------------------------------------------- INCLUDE
@@ -13,12 +21,14 @@ using namespace std;
 //----------------------------------------------------------------- PUBLIC
 
 //--------------------------------------------------------- Public Methods
-Agent::Agent ( )
+Agent::Agent(const string& username, const string& password, const string& agentID)
+    : Account(username, password, agentID) // Call to the Account constructor and initialize agentID
 {
 #ifdef MAP
     cout << "Call to the constructor of <Agent>" << endl;
 #endif
 } //----- End of Agent
+
 
 
 Agent::~Agent ( )

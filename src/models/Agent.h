@@ -11,9 +11,11 @@ class Agent : public Account
 
 public:
 //-------------------------------------------- Constructors - Destructor
-    Agent ( );
-
+    Agent(const string& username, const string& password, const string& agentID);
     virtual ~Agent ( );
+
+protected:
 };
+
 
 #endif // AGENT_H

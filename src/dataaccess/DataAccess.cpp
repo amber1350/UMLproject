@@ -137,7 +137,6 @@ int DataAccess::readCleanerData(const string& csvFile, vector<Cleaner>& cleaners
 //     return 0;
 // }
 
-
 // int DataAccess::readUserData(const string& csvFile, vector<User>& users) {
 //     ifstream file(csvFile);
 //     if (!file.is_open()) {

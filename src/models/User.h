@@ -14,11 +14,10 @@ class User : public Account
 public:
 //----------------------------------------------------- Public Methods
     int getScore();
-    bool evaluateReliability(const std::vector<std::string>& measurements);
+    void setScore();
 
 //-------------------------------------------- Constructors - Destructor
-    User();
-
+    User(const string& username, const string& password, const string& userID);
     virtual ~User();
 
 //------------------------------------------------------------------ PRIVATE
@@ -27,7 +26,6 @@ protected:
 
 //----------------------------------------------------- Protected Attributes
     int score;
-    bool isReliable;
 };
 
 #endif // USER_H

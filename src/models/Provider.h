@@ -11,7 +11,7 @@ class Provider : public Account
 
 public:
 //-------------------------------------------- Constructors - Destructor
-    Provider ( );
+    Provider(const string& username, const string& password, const string& providerID);
 
     virtual ~Provider ( );
 };

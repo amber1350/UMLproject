@@ -22,6 +22,7 @@ using namespace std;
 //------------------------------------------------------ Personal Includes
 #include "DataManagement.h"
 #include "SensorManagement.h"
+#include <unordered_map>
 
 //------------------------------------------------------------- Constants
 
@@ -57,52 +58,36 @@ float DataManagement::GenerateMean(const vector<Sensor>& sensors, const vector<M
     vector<Sensor> sensorsFiltered = sensorManagement.GetSensorWithinRadius(center, radius, sensors);
 
     // Collect all measurements from sensors within the radius
-    vector<Measurement> measurementsFiltered;    
-    for (const Sensor& sensor : sensorsFiltered) {
-        vector<Measurement> sensorMeasurements = sensor.getMeasurements();
-        measurementsFiltered.insert(measurementsFiltered.end(), sensorMeasurements.begin(), sensorMeasurements.end());
-    }
-
-    // // Filter measurements by the specified time period if startTime and endTime are different
-    measurementsFiltered = GetMeasurementsWithinTimePeriod(measurementsFiltered, startTime, endTime);
-
-    // for (const Measurement& measurement : measurementsFiltered) {
-    //     cout << measurement << endl;
-    // }
+    vector<Measurement> measurementsFiltered;
+    for (const auto& sensor : sensorsFiltered) {
+        for (const auto& measurement : GetMeasurementsWithinTimePeriod(sensor.getMeasurements(), startTime, endTime)) {
+            measurementsFiltered.push_back(measurement);
+        }
+    }    
 
     // Separate measurements by attribute
-    vector<Measurement> measurementsO3 = GetMeasurementsByAttribute(measurementsFiltered, "O3");
-    vector<Measurement> measurementsSO2 = GetMeasurementsByAttribute(measurementsFiltered, "SO2");
-    vector<Measurement> measurementsNO2 = GetMeasurementsByAttribute(measurementsFiltered, "NO2");
-    vector<Measurement> measurementsPM10 = GetMeasurementsByAttribute(measurementsFiltered, "PM10");
-
-    
-    // Calculate means
-    int n = measurementsO3.size();
-    if (n > 0) {
-        for (int i = 0; i < n; i++) {
-            meanO3 += measurementsO3[i].getValue();
-            meanSO2 += measurementsSO2[i].getValue();
-            meanNO2 += measurementsNO2[i].getValue();
-            meanPM10 += measurementsPM10[i].getValue();
-        }
-        meanO3 /= n;
-        meanSO2 /= n;
-        meanNO2 /= n;
-        meanPM10 /= n;
-        cout << "Mean calculated using " << sensorsFiltered.size() <<" sensors and " <<  n << " measurements per attribute" << endl;
-        // Calculate ATMO index
-        return ATMO(meanO3, meanSO2, meanNO2, meanPM10);
+    unordered_map<string, float> attributeMeasurements;
+    for (const auto& measurement : measurementsFiltered) {
+        attributeMeasurements[measurement.getAttributeID()] += measurement.getValue();
     }
 
-    // Return null (indicator of no data) if n == 0
+    int n = measurementsFiltered.size()/4;
+    if (n > 0) {
+        meanO3 = attributeMeasurements["O3"] / n;
+        meanSO2 = attributeMeasurements["SO2"] / n;
+        meanNO2 = attributeMeasurements["NO2"] / n;
+        meanPM10 = attributeMeasurements["PM10"] / n;
+
+        cout << "Mean calculated using " << sensorsFiltered.size() << " sensors and " <<  n << " measurements per attribute" << endl;
+        return ATMO(meanO3, meanSO2, meanNO2, meanPM10);
+    }
     return -1;
 }
 
 float DataManagement::MeasureAirQuality(const vector<Measurement>& measurements, const vector<Sensor>& sensors, const pair<float, float>& position, const string& timestamp) {
     // Get sensors within a reasonable radius
-    float radius = 10.0; // Assume a default radius of 50 km
-
+    float radius = 50.0; // Assume a default radius of 50 km
+    
     SensorManagement sensorManagement;
     vector<Sensor> nearbySensors = sensorManagement.GetSensorWithinRadius(position, radius, sensors);
 
@@ -112,48 +97,37 @@ float DataManagement::MeasureAirQuality(const vector<Measurement>& measurements,
     }
 
     // Get measurements for the specified timestamp
-    vector<Measurement> relevantMeasurements;    
+    // Use of unordered_map for efficency
+    unordered_map<string, vector<Measurement>> attributeMeasurements;
     for (const Sensor& sensor : nearbySensors) {
-        vector<Measurement> sensorMeasurements = sensor.getMeasurements();
-        relevantMeasurements.insert(relevantMeasurements.end(), sensorMeasurements.begin(), sensorMeasurements.end());
-    }
-
-    // Filter measurements by the specified time period if startTime and endTime are different
-    relevantMeasurements = GetMeasurementsWithinTimePeriod(relevantMeasurements, timestamp, timestamp);
-
-    if (relevantMeasurements.empty()) {
-        // No measurements found for the specified timestamp
-        return -1; // Indicate no data
-    }
-
-    // Calculate means
-    float meanO3 = 0, meanSO2 = 0, meanNO2 = 0, meanPM10 = 0;
-    // Separate measurements by attribute
-    vector<Measurement> measurementsO3 = GetMeasurementsByAttribute(relevantMeasurements, "O3");
-    vector<Measurement> measurementsSO2 = GetMeasurementsByAttribute(relevantMeasurements, "SO2");
-    vector<Measurement> measurementsNO2 = GetMeasurementsByAttribute(relevantMeasurements, "NO2");
-    vector<Measurement> measurementsPM10 = GetMeasurementsByAttribute(relevantMeasurements, "PM10");
-
-    
-    // Calculate means
-    int n = measurementsO3.size();
-    if (n > 0) {
-        for (int i = 0; i < n; i++) {
-            meanO3 += measurementsO3[i].getValue();
-            meanSO2 += measurementsSO2[i].getValue();
-            meanNO2 += measurementsNO2[i].getValue();
-            meanPM10 += measurementsPM10[i].getValue();
+        for (const Measurement& measurement : sensor.getMeasurements()) {
+            if (measurement.getTimestamp() == timestamp) {
+                // Separate measurements by attribute
+                attributeMeasurements[measurement.getAttributeID()].push_back(measurement);
+            }
         }
+    }
+    // HP : the same number of measurements for each attribute
+    int n = attributeMeasurements["O3"].size();
+    if (n > 0) {
+        float meanO3 = 0, meanSO2 = 0, meanNO2 = 0, meanPM10 = 0;
+        for (int i = 0; i < n; ++i) {
+            meanO3 += attributeMeasurements["O3"][i].getValue();
+            meanSO2 += attributeMeasurements["SO2"][i].getValue();
+            meanNO2 += attributeMeasurements["NO2"][i].getValue();
+            meanPM10 += attributeMeasurements["PM10"][i].getValue();
+        }
+
         meanO3 /= n;
         meanSO2 /= n;
         meanNO2 /= n;
         meanPM10 /= n;
-        cout << "AirQuality measured using " << nearbySensors.size() <<" sensors found in a " << radius << "km radius and " <<  n << " measurements per attribute" << endl;
-        // Calculate ATMO index
+
+        cout << "AirQuality measured using " << nearbySensors.size() << " sensors found in a " << radius << "km radius" << endl;
         return ATMO(meanO3, meanSO2, meanNO2, meanPM10);
-    }    
-    // Return null (indicator of no data) if n == 0
-    return -1;
+    }
+    // No measurements found for the specified timestamp
+    return -1; // Indicate no data   
 }
 
 
