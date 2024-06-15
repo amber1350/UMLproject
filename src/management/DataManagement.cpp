@@ -17,6 +17,7 @@
 #include <ctime>
 #include <iomanip>
 #include <sstream>
+#include <chrono> 
 using namespace std;
 
 //------------------------------------------------------ Personal Includes
@@ -50,83 +51,107 @@ DataManagement::~DataManagement ( )
 } //----- End of ~Sensor
 
 float DataManagement::GenerateMean(const vector<Sensor>& sensors, const vector<Measurement>& measurements, float radius, const pair<float, float>& center, const string& startTime, const string& endTime) {
-    // Initialize means for pollutants
-    float meanO3 = 0, meanSO2 = 0, meanNO2 = 0, meanPM10 = 0;
+    cout << "Call to GenerateMean" << endl;
+    auto start = chrono::high_resolution_clock::now(); // Start timing
+
+    
 
     // Get sensors within the specified radius
     SensorManagement sensorManagement;
     vector<Sensor> sensorsFiltered = sensorManagement.GetSensorWithinRadius(center, radius, sensors);
-
+    unordered_map<string, float> attributeMeasurements;
+    int n = 0;
     // Collect all measurements from sensors within the radius
-    vector<Measurement> measurementsFiltered;
     for (const auto& sensor : sensorsFiltered) {
         for (const auto& measurement : GetMeasurementsWithinTimePeriod(sensor.getMeasurements(), startTime, endTime)) {
-            measurementsFiltered.push_back(measurement);
+             // Separate measurements by attribute
+            attributeMeasurements[measurement.getAttributeID()] += measurement.getValue();
+            n++;
         }
     }    
 
-    // Separate measurements by attribute
-    unordered_map<string, float> attributeMeasurements;
-    for (const auto& measurement : measurementsFiltered) {
-        attributeMeasurements[measurement.getAttributeID()] += measurement.getValue();
-    }
-
-    int n = measurementsFiltered.size()/4;
+    
     if (n > 0) {
+        // HP : same number of measurement for each attribute
+        n = n / 4;
+        // Initialize means for pollutants
+        float meanO3 = 0, meanSO2 = 0, meanNO2 = 0, meanPM10 = 0;
+
         meanO3 = attributeMeasurements["O3"] / n;
         meanSO2 = attributeMeasurements["SO2"] / n;
         meanNO2 = attributeMeasurements["NO2"] / n;
         meanPM10 = attributeMeasurements["PM10"] / n;
 
         cout << "Mean calculated using " << sensorsFiltered.size() << " sensors and " <<  n << " measurements per attribute" << endl;
+        auto end = chrono::high_resolution_clock::now(); // End timing
+        chrono::duration<double> duration = end - start;
+        cout << "Execution time: " << duration.count() << " seconds" << endl;
+
         return ATMO(meanO3, meanSO2, meanNO2, meanPM10);
     }
+
+    auto end = chrono::high_resolution_clock::now(); // End timing
+    chrono::duration<double> duration = end - start;
+    cout << "Execution time: " << duration.count() << " seconds" << endl;
+    
     return -1;
 }
 
+
 float DataManagement::MeasureAirQuality(const vector<Measurement>& measurements, const vector<Sensor>& sensors, const pair<float, float>& position, const string& timestamp) {
+    auto start = chrono::high_resolution_clock::now(); // Start timing
     // Get sensors within a reasonable radius
-    float radius = 50.0; // Assume a default radius of 50 km
+    float radius = 10.0; // Assume a default radius of 10 km
     
     SensorManagement sensorManagement;
     vector<Sensor> nearbySensors = sensorManagement.GetSensorWithinRadius(position, radius, sensors);
 
     if (nearbySensors.empty()) {
         // No sensors found within the radius
+        auto end = chrono::high_resolution_clock::now(); // End timing
+        chrono::duration<double> duration = end - start;
+        cout << "Execution time: " << duration.count() << " seconds" << endl;
+
         return -1; // Indicate no data
     }
 
+    // Separate measurements by attribute
     // Get measurements for the specified timestamp
     // Use of unordered_map for efficency
-    unordered_map<string, vector<Measurement>> attributeMeasurements;
+    int n = 0;
+    unordered_map<string, float> attributeMeasurements;
     for (const Sensor& sensor : nearbySensors) {
         for (const Measurement& measurement : sensor.getMeasurements()) {
             if (measurement.getTimestamp() == timestamp) {
                 // Separate measurements by attribute
-                attributeMeasurements[measurement.getAttributeID()].push_back(measurement);
+                n++;
+                attributeMeasurements[measurement.getAttributeID()] += measurement.getValue();
             }
         }
     }
-    // HP : the same number of measurements for each attribute
-    int n = attributeMeasurements["O3"].size();
-    if (n > 0) {
-        float meanO3 = 0, meanSO2 = 0, meanNO2 = 0, meanPM10 = 0;
-        for (int i = 0; i < n; ++i) {
-            meanO3 += attributeMeasurements["O3"][i].getValue();
-            meanSO2 += attributeMeasurements["SO2"][i].getValue();
-            meanNO2 += attributeMeasurements["NO2"][i].getValue();
-            meanPM10 += attributeMeasurements["PM10"][i].getValue();
-        }
 
-        meanO3 /= n;
-        meanSO2 /= n;
-        meanNO2 /= n;
-        meanPM10 /= n;
+    if (n > 0) {
+        // HP : the same number of measurements for each attribute
+        n = n/4;
+        float meanO3 = 0, meanSO2 = 0, meanNO2 = 0, meanPM10 = 0;
+        meanO3 = attributeMeasurements["O3"] / n;
+        meanSO2 = attributeMeasurements["SO2"] / n;
+        meanNO2 = attributeMeasurements["NO2"] / n;
+        meanPM10 = attributeMeasurements["PM10"] / n;        
 
         cout << "AirQuality measured using " << nearbySensors.size() << " sensors found in a " << radius << "km radius" << endl;
+        auto end = chrono::high_resolution_clock::now(); // End timing
+        chrono::duration<double> duration = end - start;
+        cout << "Execution time: " << duration.count() << " seconds" << endl;
+
         return ATMO(meanO3, meanSO2, meanNO2, meanPM10);
     }
+
     // No measurements found for the specified timestamp
+    auto end = chrono::high_resolution_clock::now(); // End timing
+    chrono::duration<double> duration = end - start;
+    cout << "Execution time: " << duration.count() << " seconds" << endl;
+
     return -1; // Indicate no data   
 }
 
@@ -152,10 +177,8 @@ tm StringToTime(const string& timestamp) {
     return tm;
 }
 
-bool CompareTimestamps(const string& t1, const string& t2) {
-    // Compare two timestamp strings
-    tm tm1 = StringToTime(t1);
-    tm tm2 = StringToTime(t2);
+bool CompareTimestamps(tm& tm1, tm& tm2) {
+    // Compare two timestamp tm
     // mktime(&tm1) : converts the std::tm structure to a time_t value, which represents the number of seconds since the Unix epoch (January 1, 1970).
     // difftime : calculates the difference in seconds between the two time_t values.   
     return difftime(mktime(&tm1), mktime(&tm2)) <= 0;
@@ -163,9 +186,12 @@ bool CompareTimestamps(const string& t1, const string& t2) {
 }
 
 vector<Measurement> DataManagement::GetMeasurementsWithinTimePeriod(const vector<Measurement>& measurements, const string& startTime, const string& endTime) {
+    tm startTimeTm = StringToTime(startTime);
+    tm endTimeTm = StringToTime(endTime);
     vector<Measurement> result;
     for (const Measurement& measurement : measurements) {
-        if (CompareTimestamps(startTime, measurement.getTimestamp()) && CompareTimestamps(measurement.getTimestamp(), endTime)) {            
+        tm timestampTm = StringToTime(measurement.getTimestamp());
+        if (CompareTimestamps(startTimeTm, timestampTm) && CompareTimestamps(timestampTm, endTimeTm)) {            
             result.push_back(measurement);
         }
     }

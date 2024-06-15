@@ -1,13 +1,13 @@
 /*************************************************************************
-                           AgentInterface  -  Description
+                           ProviderInterface  -  Description
                              -------------------
     Start Date          : $DATE$
     Copyright           : (C) $YEAR$ by $AUTHOR$
     Email               : $EMAIL$
 *************************************************************************/
 
-#if ! defined ( AGENTINTERFACE_H )
-#define AGENTINTERFACE_H
+#if ! defined ( PROVIDERINTERFACE_H )
+#define PROVIDERINTERFACE_H
 
 //------------------------------------------------------- Used Interfaces
 
@@ -18,29 +18,26 @@ using namespace std;
 #include "../management/DataManagement.h"
 #include "../management/SensorManagement.h"
 
-#include "../models/Sensor.h"
-#include "../models/Measurement.h"
 #include "../models/Cleaner.h"
+#include "../models/Measurement.h"
+#include "../models/Sensor.h"
 
-class AgentInterface
+class ProviderInterface
 {
 //----------------------------------------------------------------- PUBLIC
 
 public:
 //-------------------------------------------- Constructors - Destructor
-    AgentInterface();
-    virtual ~AgentInterface();
+    ProviderInterface();
+    virtual ~ProviderInterface();
 
 //--------------------------------------------------------- Public Methods
     void DisplayMenu(const vector<Cleaner>& cleaners, const vector<Sensor>& sensors, const vector<Measurement>& measurements);
-    void MonitorSensor(const vector<Sensor>& sensors, const vector<Measurement>& measurements);
+    void RegisterCleaner(const vector<Cleaner>& cleaners);
     void MonitorCleaner(const vector<Cleaner>& cleaners, const vector<Sensor>& sensors, const vector<Measurement>& measurements);
-    void MonitorIndividual(const vector<Sensor>& sensors, const vector<Measurement>& measurements);
     void Logout();
-    void GenerateMean(const vector<Sensor>& sensors, const vector<Measurement>& measurements);
-    void CalculateAirQuality(const vector<Sensor>& sensors, const vector<Measurement>& measurements);
-    void RankSensor();
+    
 };
 
-#endif // AGENTINTERFACE_H
+#endif // USERINTERFACE_H
 

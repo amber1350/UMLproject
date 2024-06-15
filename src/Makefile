@@ -4,13 +4,19 @@ ifeq ($(DMAP),1)
     DMAP_FLAG := -D DMAP
 endif
 
-all: main
+all: main test
 
-main: main.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o SensorManagement.o DataManagement.o
-	g++ -std=c++17 -o test main.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o SensorManagement.o DataManagement.o
+test: test.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o SensorManagement.o DataManagement.o 
+	g++ -std=c++17 -o test test.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o SensorManagement.o DataManagement.o 
 
-main.o: main.cpp
-	g++ -std=c++17 $(DMAP_FLAG) -c main.cpp
+main: Main.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o SensorManagement.o DataManagement.o AgentInterface.o UserInterface.o ProviderInterface.o
+	g++ -std=c++17 -o main main.o DataAccess.o Attribute.o Measurement.o Sensor.o Cleaner.o SensorManagement.o DataManagement.o AgentInterface.o UserInterface.o ProviderInterface.o
+
+Main.o: Main.cpp
+	g++ -std=c++17 $(DMAP_FLAG) -c Main.cpp
+
+test.o: test.cpp
+	g++ -std=c++17 $(DMAP_FLAG) -c test.cpp
 
 Account.o: models/Account.cpp
 	g++ -std=c++17 $(DMAP_FLAG) -c models/Account.cpp
@@ -45,5 +51,14 @@ SensorManagement.o: management/SensorManagement.cpp
 DataManagement.o: management/DataManagement.cpp
 	g++ -std=c++17 $(DMAP_FLAG) -c management/DataManagement.cpp
 
+AgentInterface.o: interface/AgentInterface.cpp
+	g++ -std=c++17 $(DMAP_FLAG) -c interface/AgentInterface.cpp
+
+UserInterface.o: interface/UserInterface.cpp
+	g++ -std=c++17 $(DMAP_FLAG) -c interface/UserInterface.cpp
+
+ProviderInterface.o: interface/ProviderInterface.cpp
+	g++ -std=c++17 $(DMAP_FLAG) -c interface/ProviderInterface.cpp
+
 clean:
-	rm -f *.o main
+	rm -f *.o main test

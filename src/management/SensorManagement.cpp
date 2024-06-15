@@ -50,11 +50,11 @@ SensorManagement::~SensorManagement ( )
 
 void SensorManagement::MonitorSensor(const string& sensorID, const vector<Measurement>& measurements) {
     cout << "Monitoring Sensor: " << sensorID << endl;    
-    // Add logic to analyze data to ensure the sensor is functioning correctly
+    // Logic to analyze data to ensure the sensor is functioning correctly
 }
 
 vector<pair<Sensor, float>> SensorManagement::RankSensor(const string& referenceSensorID, const string& startTime, const string& endTime, const vector<Sensor>& sensors, const vector<Measurement>& measurements, const vector<Attribute>& attributes){
-    cout << "Ranking Sensor: " << referenceSensorID << endl; 
+    cout << "Ranking Sensor: " << referenceSensorID << endl;     
     vector<pair<Sensor, float>> sensorSimilarities;
     // Get reference sensor
     auto it = find_if(sensors.begin(), sensors.end(), [&](const Sensor& s) { return s.getSensorID() == referenceSensorID; });
